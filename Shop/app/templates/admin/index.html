@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/admin_login.css') }}">
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1314135_chl3ssxf93l.css">
+</head>
+<body>
+  <div class="box">
+    <h1>宏小圣商城后台管理系统</h1>
+    <input type="text" name="" placeholder="UserName" id="name" style="margin-top:30px;">
+    <input type="password" name="" id="pwd" placeholder="PassWord">
+    <input type="submit" name="" value="登录" class="login">
+  </div>
+</body>
+<script>
+    $('.login').click(()=>{
+        let form = new FormData();
+        console.log($('#name')[0].value,$('#pwd')[0].value);
+        form['name']=$('#name')[0].value;
+        form['pwd']=$('#pwd')[0].value;
+        console.log(form);
+        $.ajax({
+            url:'index/',
+            type:'POST',
+            dataType:'json',
+            data:JSON.stringify(form),
+            success:function(data){
+                if(data.status==='ok')
+                {
+                    window.location.href='index/first';
+                }
+            },
+            error:function(response){
+
+                 console.log(response.status);
+
+            }
+
+        })
+    })
+</script>
+</html>

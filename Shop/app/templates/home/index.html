@@ -1,0 +1,965 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/index.css')}}" />
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.css') }}">
+    <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/picture-carousel.min.css')}}" />
+    <script type="text/javascript" src="{{ url_for('static',filename='js/picture-carousel.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/wySilder.min.js')}}" type="text/javascript"></script>
+
+    {# 倒计时#}
+    <!-- Our CSS stylesheet file -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/styles.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/countdown/jquery.countdown.css')}}" />
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    {# 家居轮播图 #}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css_home/sliderx.css')}}">
+    <style>
+        {#    小米手机模块#}
+        .mi01 div:hover{
+            background-color: #e9e9e9;
+        }
+        .mi01 div a img{
+            width:auto;
+            height:200px;
+        }
+
+        .mi_price {
+         color:red;
+        }{#价格#}
+       {#      华为手机模块#}
+        .hua01 div:hover {
+            background-color: #e9e9e9;
+        }
+        .hua01 div a img{
+            width:auto;
+            height:200px;
+        }
+        html,body{
+            margin: 0;
+            padding: 0;
+            border: none;
+            width: 100%;
+            height: 100%;
+
+          }
+          #box{
+            min-width: 1000px;
+            width: 100%;
+            height: 500px;
+            margin: 50px auto;
+          }
+          {#秒杀模块#}
+          .minutes
+          {
+                display:flex;flex-wrap:nowrap;justify-content:space-between;height:100px;margin-top:10px;
+          }
+          .miuntes_div
+          {
+              float:left;margin-left:10px;height:455px;width:calc(45% - 5);
+
+          }
+          .miuntes_div:hover{
+              opacity:0.7;
+          }
+          .miuntes_a
+          {
+              display: block;height:455px;text-align: center;
+          }
+          {#家居模块#}
+          .home
+          {
+              text-align: center;font-size: 40px;font-weight: bold;height:100px;line-height: 100px;
+              border-radius: 10px;
+          }
+          .home_line1,.home_line1-1
+          {
+              display:flex;flex-wrap:nowrap;justify-content:space-between;height:400px;margin-top:40px;
+          }
+          .home_line1 div:nth-child(2)
+          {
+              margin-left:10px;height:350px;
+          }
+          .home_line1 div:nth-child(1)
+          {
+              height:350px;
+          }
+          .home_1 div{
+              opacity:0.9;
+              position:relative;
+          }
+
+          .home_1 div:hover
+          {
+              opacity:1;
+          }
+           .home_1 div:hover .home_temp
+           {
+               display:none;
+           }
+
+          .home_1
+          {
+              position:relative;
+          }
+          .home_temp {#蒙版#}
+          {
+              position: absolute;
+              top:-300px;
+              background: rgba(0, 0, 0, 0.86);
+              text-align: center;
+              line-height: 300px;
+              font-size:30px;
+              color:white;
+              width:300px;
+              height:300px !important;
+          }
+          {#数码模块#}
+          .protwo-title {
+            width: 135px;
+            padding: 3px 0 10px;
+            margin: 0 auto;
+            font-size: 12px;
+            color: #9c9c9c;
+            line-height: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+          .c3c{
+            display: block;margin-right:15px;text-decoration: none;
+            }
+
+    </style>
+
+    <div class="tabbable" style="width:100%;"> <!-- Only required for left/right tabs -->
+       <ul class="nav" style="margin-left:0;margin-right:0;font-size: 20px;display: flex;flex-wrap: nowrap;justify-content: space-around;"><!--#标签-->
+            <li class="active">
+                <a href="#tab1" data-toggle="tab">首页</a>
+            </li>
+            <li>
+                <a href="#tab2" data-toggle="tab">新品</a>
+            </li>
+            <li>
+                <a href="#tab3" data-toggle="tab">秒杀</a>
+            </li>
+            <li>
+                <a href="#tab4" data-toggle="tab">家居</a>
+            </li>
+            <li>
+                <a href="#tab5" data-toggle="tab">数码</a>
+            </li>
+       </ul>
+
+       <div class="tab-content" style="max-width:1140px;height: 600px;margin:0 auto;display:block;position:relative;">
+            <div class="tab-pane active" id="tab1" style="max-width:100%;">
+               {#轮播图#}
+                <!-- 水平滑动：容器的宽度 % duration = 0 -->
+                  <!-- 水平滑动：容器的高度 % duration = 0 -->
+               <div id="box"></div>
+
+                <div style="display: flex;flex-wrap: nowrap;height:94px;width:100%;justify-content: space-around;margin-top:35px;margin-bottom:35px;">
+                    <div style="border-radius:6px;width:20%;background: url('../../static/img/line0.png') no-repeat;background-position-x:center;">
+                        <a href=""></a>
+                    </div>
+                    <div style="border-radius:6px;width:20%;background: url('../../static/img/line1.png') no-repeat;background-position-x:center;">
+                        <a href=""></a>
+                    </div>
+                    <div style="border-radius:6px;width:20%;background: url('../../static/img/line2.png') no-repeat;background-position-x:center;">
+                        <a href=""></a>
+                    </div>
+                    <div style="border-radius:6px;width:20%;background: url('../../static/img/line3.png') no-repeat;background-position-x:center;">
+                        <a href=""></a>
+                    </div>
+                    <div style="border-radius:6px;width:20%;background: url('../../static/img/line4.png') no-repeat;background-position-x:center;">
+                        <a href=""></a>
+                    </div>
+                </div>
+               <script type="text/javascript">
+                 var box = new PictureCarousel('#box',{
+                  direction: 'left',//轮播方向：left，right
+                  interval: 4000,//单位ms,轮播持续时间
+                  duration: 50,//单位ms,自动切换时间间隔，最佳速度:容器宽度/duration = 25
+                  autoplay: true,//是否自动播放
+                  display: 1,//同时显示的滑块数量
+                  arrow: true,//是否显示左右箭头
+                  dots: true,//是否显示指示点
+                  listData: [//插入图片等的数据
+                    {src: '../static/img/t1.jpg',alt: '1'},
+                    {src:'../static/img/t2.jpg',alt: '2'},
+                    {src: '../static/img/t3.jpg',alt: '3'},
+                    {src: '../static/img/t4.jpg',alt: '4'}
+                  ]
+                });
+                box.init();
+               </script>
+
+                <br>
+                {#手机模块#}
+                <div style="border-radius: 50%;width:60px;height:60px;background-color: yellow;line-height: 60px;text-align: center;">
+                    <p style="font-size: 25px;font-family: 'Adobe 楷体 Std R';color:red">数码</p>
+                </div>
+                {#小米手机模块#}
+                <br>
+                <div style="background-color: #ff521e;height:60px;">
+                    <div style="margin:0 auto;position:relative">
+                        <img src="{{ url_for('static',filename='img/mi-logo.png')}}" style="position:relative;margin:0 auto;" alt="">
+                    </div>
+                </div>
+                <div class="mi01" style="display: flex;flex-wrap: nowrap;justify-content: space-between;text-align: center">
+                    <div>
+                        <a href="#"  class="redmi" style="display: block;" >
+                            <img src="{{ url_for('static',filename='img/xiaomi001.jpg')}}" alt="">
+                        </a>
+                        <p>Redmi K30</p>
+                        <p>双模5G，120Hz流速屏</p>
+                        <p class="mi_price" >1599元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/xiaomi002.jpg')}}" alt="">
+                        </a>
+                        <p>Redmi K30 5G</p>
+                        <p>120Hz流速屏，全速热爱</p>
+                        <p class="mi_price">2599元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/xiaomi003.jpg')}}" alt="">
+                        </a>
+                        <P>小米CC9 Pro</P>
+                        <p>1亿像素 五摄四闪</p>
+                        <p class="mi_price">699元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/xiaomi004.jpg')}}" alt="">
+                        </a>
+                        <P>Redmi 8</P>
+                        <p>5000mAh超长续航</p>
+                        <p class="mi_price">2599元起</p>
+                    </div>
+                    <script>
+                        $('.redmi').click(function(){
+
+                            $.ajax({
+                              type:"post",
+                              url: '/path/',
+                              data:JSON.stringify({'name':'redmi','price':'123'}),
+                              contentType: 'application/json; charset=UTF-8',
+                              success:function(data){
+                               alert(4321);
+                               console.log('后台返回来的结果'+data);
+
+                             },
+                              error: function() {
+                              console.log("网络异常");
+                             }
+                            });
+                        })
+                    </script>
+                </div>
+                <div class="mi01" style="display: flex;flex-wrap: nowrap;justify-content: space-between;text-align: center">
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/xiaomi005.jpg')}}" alt="">
+                        </a>
+                        <p>Redmi K30</p>
+                        <p>双模5G，120Hz流速屏</p>
+                        <p class="mi_price" >1599元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/xiaomi006.jpg')}}" alt="">
+                        </a>
+                        <p>Redmi K30 5G</p>
+                        <p>6400万全场景四摄</p>
+                        <p class="mi_price">2599元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/xiaomi007.jpg')}}" alt="">
+                        </a>
+                        <P>小米CC9 Pro</P>
+                        <p>5000mAh超长续航</p>
+                        <p class="mi_price">699元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/xiaomi008.jpg')}}" alt="">
+                        </a>
+                        <P>Redmi 8</P>
+                        <p>5000mAh超长续航</p>
+                        <p class="mi_price">2599元起</p>
+                    </div>
+                </div>
+                {#华为手机模块#}
+                <br>
+                <div style="background-color: #f04c53">
+                    <div style="padding:0;">
+                        <img src="{{ url_for('static',filename='img/huawei_logo.png')}}" style="position:relative;margin:0 auto;" alt="">
+                    </div>
+                </div>
+                <br>
+                <div class="hua01" style="display: flex;flex-wrap: nowrap;justify-content: space-between;text-align: center">
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/huawei001.png')}}" alt="">
+                        </a>
+                        <p>华为畅享 10S</p>
+                        <p>最高领券减200 </p>
+                        <p class="mi_price" >1599元</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/huawei002.png')}}" alt="">
+                        </a>
+                        <p>荣耀Note10</p>
+                        <p>最高省800到手1399起 </p>
+                        <p class="mi_price">1399元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/huawei003.png')}}" alt="">
+                        </a>
+                        <P>荣耀8X Max</P>
+                        <p>最高降800元 </p>
+                        <p class="mi_price">999元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/huawei004.png')}}" alt="">
+                        </a>
+                        <P>HUAWEI Mate 20 RS 保时捷设计</P>
+                        <p>赠FreeBuds 3 享6期免息 </p>
+                        <p class="mi_price">12999</p>
+                    </div>
+                </div>
+                <div class="hua01" style="display: flex;flex-wrap: nowrap;justify-content: space-between;text-align: center">
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/huawei005.png')}}" alt="">
+                        </a>
+                        <p>HUAWEI Mate 20 Pro</p>
+                        <p>领券减800|12期免息 </p>
+                        <p class="mi_price" >5099元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/huawei006.png')}}" alt="">
+                        </a>
+                        <p>荣耀畅玩8</p>
+                        <p>购机晒单抽好礼 </p>
+                        <p class="mi_price">599元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/huawei007.png')}}" alt="">
+                        </a>
+                        <P>HUAWEI Mate 20</P>
+                        <p>领券减500|12期免息 </p>
+                        <p class="mi_price">3199元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/huawei008.png')}}" alt="">
+                        </a>
+                        <P>荣耀Play3e</P>
+                        <p>购机抽锦鲤大奖 </p>
+                        <p class="mi_price">899</p>
+                    </div>
+                </div>
+                <br>
+                {#平板电脑模块#}
+                <div style="border-radius: 50%;width:60px;height:60px;background-color: yellow;line-height: 60px;text-align: center;">
+                    <p style="font-size: 25px;font-family: 'Adobe 楷体 Std R';color:red">平板</p>
+                </div>
+                <br>
+                {#小米电脑模块#}
+                <div style="background-color: #ff521e;height:60px;">
+                    <div style="margin:0 auto;position:relative">
+                        <img src="{{ url_for('static',filename='img/mi-logo.png')}}" style="position:relative;margin:0 auto;"  alt="">
+                    </div>
+                </div>
+                <div class="hua01" style="display: flex;flex-wrap: nowrap;justify-content: space-between;text-align: center">
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/mipad01.jpg')}}" alt="">
+                        </a>
+                        <p>Air 13.3" 2019款</p>
+                        <p>新一代独立显卡 </p>
+                        <p class="mi_price" >4999元</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/mipad02.jpg')}}" alt="">
+                        </a>
+                        <p>Air 12.5" 2019款</p>
+                        <p>像杂志一样随身携带 </p>
+                        <p class="mi_price">3599元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/mipad03.jpg')}}" alt="">
+                        </a>
+                        <P>Pro 15.6" MX250独显版</P>
+                        <p>强悍的专业笔记本 </p>
+                        <p class="mi_price">4999元起</p>
+                    </div>
+                    <div>
+                        <a href="" style="display: block;">
+                            <img src="{{ url_for('static',filename='img/mipad04.jpg')}}" alt="">
+                        </a>
+                        <P>Pro 15.6" GTX显卡</P>
+                        <p>更强悍的专业笔记本 </p>
+                        <p class="mi_price">5999元起</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center;position:relative;height:50px;font-size:20px;width:100%;margin-top:100px;">
+                    @ 2019 flask.shopping.com 晋ICP备 131110532号-1
+                </div>
+            </div> {# 首页 #}
+
+            <div class="tab-pane" id="tab2" style="padding-top:40px;">{# 新品 #}
+              <div style="width:100%;height:400px;background-color: #F3F4F2;">
+                  <div style="text-align:center;float:left;width:calc(50% - 5px);height:100%;background-color:white;">
+                      <div>
+                          <img src="{{ url_for('static',filename='img/left.png') }}" style="position: relative;margin:0 auto;" alt="">
+                      </div>
+                      <div style="float:left;width:calc(50% - 5px);height:90px;text-align: center">
+                          <p style="font-size: 30px;font-weight: bold;">最高省100元</p>
+                          <p>Redmi Note 8 Pro</p>
+                      </div>
+                      <div style="float:left;width:calc(50% - 5px);height:50px;border-radius: 6px;text-align: center">
+                          <p style="color:red">￥1119起</p>
+                          <div style="margin:0 auto;height:30px;width:100px;border-radius: 5px;line-height:30px;background: linear-gradient( to right,#7914a8,#80407f)">
+                              <a href="#" target="_blank" style="text-decoration: none;color:white;">立即购买</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div style="float:left;width:calc(50% - 5px);height:100%;background-color:white;margin-left:10px;">
+                      <div>
+                          <img src="{{ url_for('static',filename='img/right.png') }}" style="position: relative;margin:0 auto;" alt="">
+                      </div>
+                      <div style="float:left;width:calc(50% - 5px);height:90px;text-align: center">
+                          <p  style="font-size: 30px;font-weight: bold">Redmi Note 8</p>
+                          <p>4800万超清四射/高通骁龙655</p>
+                      </div>
+                      <div style="float:left;width:calc(50% - 5px);height:50px;border-radius: 6px;text-align: center">
+                          <p style="color:red">￥999起</p>
+                          <div style="margin:0 auto;height:30px;width:100px;border-radius: 5px;line-height:30px;background: linear-gradient( to right,#7914a8,#80407f)">
+                              <a href="#" target="_blank" style="text-decoration: none;color:white;">立即购买</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div style="background: #f7f7f7;">
+                 <form action="" method="get" style="text-align: left;">
+                    <label><input class="sale" type="checkbox" value="" />销量 </label>
+                    <label><input class="date" type="checkbox" value="" />日期 </label>
+                    <label><input class="brand" type="checkbox" value="" />名牌 </label>
+                    <label><input class="incress" name = "cress" type="radio" value="incress" />升序 </label>
+                    <label><input class="decress" name = "cress" type="radio" value="decress" />降序 </label>
+                    <input  type="button" value="检索"  class="btn-group btn-group-xs search" role="group"/>
+                 </form>
+              </div>
+              <div class="img_list" style="margin-top:60px;height:190px;min-width:1080px;display: flex;flex-wrap: nowrap;justify-content: space-around">
+                   {% for i in data.file[0] %}
+                       <img style="width:180px;display:block;float:left"  src="data:image/jpeg;base64,{{ i }}">
+                   {% endfor %}
+
+              </div>
+
+              <div class="img_list" style="min-width:1080px;display: flex;font-size:12px;flex-wrap: nowrap;text-align:center;justify-content: space-around">
+                  <div>
+                      未来人类 S4 S4-ZXT-7 I7 7700HQ GTX1060 6G 14寸金属游戏本GS43
+                      <p class="mi_price">￥1899</p>
+
+                  </div>
+                  <div>AMD  X4 640   4G 1T 台式机组装机电脑主机办公专用DIY整机包邮
+
+                       <p class="mi_price">￥2799</p>
+                  </div>
+                  <div>研华 TPC-1551H 15寸工业平板电脑 TPC-1551H-E3AE
+                      <p class="mi_price">￥3899</p>
+
+
+                  </div>
+                  <div>未来人类 X711 X711-1070-77SH1 512G固态 4T 64G内存
+                       <p class="mi_price">￥6000</p>
+
+
+                  </div>
+                  <div>acer/宏碁台式机大客户E430 G4560 4G 1T 集成配19.5寸显示器
+                      <p class="mi_price">￥7000</p>
+
+
+                  </div>
+                  <div>Acer/宏碁 大客户D430 i5-7500 4G 1T +19.5寸商用台式电脑主机
+
+                        <p class="mi_price">￥9999</p>
+                  </div>
+              </div>
+              <div class="decress_line" style="display: none;">
+                  <div  style="display:flex;margin-top:60px;height:190px;min-width:1080px;flex-wrap: nowrap;justify-content: space-around">
+                       <img style="width:180px;display:block;float:left"  src="{{ url_for('static',filename='img/NewT/line1-1.jpg') }}">
+                       <img style="width:180px;display:block;float:left"  src="{{ url_for('static',filename='img/NewT/line1-2.jpg') }}">
+                       <img style="width:180px;display:block;float:left"  src="{{ url_for('static',filename='img/NewT/line1-3.jpg') }}">
+                       <img style="width:180px;display:block;float:left"  src="{{ url_for('static',filename='img/NewT/line1-4.jpg') }}">
+                       <img style="width:180px;display:block;float:left"  src="{{ url_for('static',filename='img/NewT/line1-5.jpg') }}">
+                       <img style="width:180px;display:block;float:left"  src="{{ url_for('static',filename='img/NewT/line1-6.jpg') }}">
+                  </div>
+                  <div  style="min-width:1080px;display: flex;font-size:12px;flex-wrap: nowrap;text-align:center;justify-content: space-around">
+                      <div>Acer/宏碁 大客户D430 i5-7500 4G 1T +19.5寸商用台式电脑主机
+
+                            <p class="mi_price">￥9999</p>
+                      </div>
+                      <div>acer/宏碁台式机大客户E430 G4560 4G 1T 集成配19.5寸显示器
+                          <p class="mi_price">￥7000</p>
+
+
+                      </div>
+                      <div>未来人类 X711 X711-1070-77SH1 512G固态 4T 64G内存
+                           <p class="mi_price">￥6000</p>
+
+
+                      </div>
+                      <div>研华 TPC-1551H 15寸工业平板电脑 TPC-1551H-E3AE
+                          <p class="mi_price">￥3899</p>
+
+
+                      </div>
+                      <div>AMD  X4 640   4G 1T 台式机组装机电脑主机办公专用DIY整机包邮
+
+                           <p class="mi_price">￥2799</p>
+                      </div>
+                      <div>
+                          未来人类 S4 S4-ZXT-7 I7 7700HQ GTX1060 6G 14寸金属游戏本GS43
+                          <p class="mi_price">￥1899</p>
+
+                      </div>
+
+                    </div>
+              </div>
+                <script>
+                    $('.search').click(()=> {
+                        if ($('.decress')[0].checked === true) {
+                            $('.decress_line')[0].style.display='block';
+
+                            $('.img_list')[0].style.visibility = 'hidden';
+                            $('.img_list')[0].style.display = 'none';
+                            $('.img_list')[1].style.visibility = 'hidden';
+                            $('.img_list')[1].style.display = 'none';
+
+                        }
+                        else if($('.incress')[0].checked ===true)
+                        {
+                            $('.decress_line')[0].style.display='none';
+
+
+                            $('.img_list')[0].style.visibility = 'visible';
+                             $('.img_list')[0].style.display = 'flex';
+                            $('.img_list')[1].style.visibility = 'visible';
+                            $('.img_list')[1].style.display = 'flex';
+
+                        }
+                    })
+
+
+
+                </script>
+              <div style="text-align: center;position:relative;height:50px;font-size:20px;width:100%;margin-top:100px;">
+                    @ 2019 flask.shopping.com 晋ICP备 131110532号-1
+              </div>
+            </div>
+
+            <div class="tab-pane" id="tab3" style="padding-top:40px;"> {# 秒杀#}
+               <div> {# 倒计时模块 #}
+                      <div id="countdown"></div>
+
+                        <p id="note"></p>
+
+                        <div style="text-align:center;clear:both; font-size:12px; margin-top:100px;"></div>
+
+                        <script src="{{ url_for('static',filename='assets/countdown/jquery.countdown.js')}}"></script>
+                        <script src="{{ url_for('static',filename='assets/js/script.js')}}"></script>
+
+               </div>
+               <div style="margin-top:60px;height:488px;width:100%;display:flex;flex-wrap:nowrap;justify-content:space-around">
+                   <div class="miuntes_div">
+                       <a href="#" class="miuntes_a" style="text-decoration: none;">
+                           <img src="{{ url_for('static',filename='img/shoes.jpg')}}" height=300 width=550 alt="">
+                           <div class="minutes">
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/shoes-1.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       <br>
+                                       红蜻蜓正品新款真皮商务休闲鞋中老年棉鞋加绒保暖爸爸鞋WTD7175
+                                   </div>
+                                   <p class="mi_price">￥159</p>
+                               </div>
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/shoes-2.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       <br>
+                                       七匹狼皮带男真皮自动扣 韩版休闲青年学生牛皮裤带 商务男士腰带
+                                   </div>
+                                   <p class="mi_price">￥67.45</p>
+                               </div>
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/shoes-3.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       <br>
+                                       回力皮面防水全包跟棉拖鞋秋冬季情侣居家室内加绒保暖男女棉鞋新
+                                   </div>
+                                   <p class="mi_price">￥29.7</p>
+                               </div>
+                           </div>
+                       </a>
+                   </div>
+                   <div class="miuntes_div">
+                       <a href="#" class="miuntes_a" style="text-decoration: none;">
+                           <img src="{{ url_for('static',filename='img/home.jpg')}}" height=300 width=550 alt="">
+                           <div class="minutes">
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/home-1.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       【79.9元限时抢，抢完恢复104.14元】蓝月亮洗衣液12斤亮白增艳薰衣草香瓶装袋装官方正品多规格可选
+                                   </div>
+                                   <p class="mi_price">￥79.9</p>
+                               </div>
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/home-2.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       【49.9元限时抢，抢完恢复71.28元】蓝月亮8斤洁净洗衣液薰衣草香家庭装组合补充袋装官方正品多规格
+                                   </div>
+                                   <p class="mi_price">￥49.9</p>
+                               </div>
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/home-3.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       【99元限时抢，抢完恢复141.42元】蓝月亮旗舰店亮白增艳洗衣液14斤机洗瓶装组合薰衣草香型多规格选
+                                   </div>
+                                   <p class="mi_price">￥99</p>
+                               </div>
+                           </div>
+                       </a>
+                   </div>
+               </div>
+
+               <div style="margin-top:130px;height:488px;width:100%;display:flex;flex-wrap:nowrap;justify-content:space-around">
+                   <div class="miuntes_div img">
+                       <a href="#" class="miuntes_a" style="text-decoration: none;">
+                           <img haoroomslazyload="{{ url_for('static',filename='img/medical.jpg')}}" src="" height=300 width=550 alt="">
+                           <div class="minutes">
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/medical-1.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       <br>
+                                       正品三九999感冒灵颗粒9袋咳嗽感冒药流鼻涕39九九白云山冲剂药店
+                                   </div>
+                                   <p class="mi_price">￥10.5</p>
+                               </div>
+                               <div style="height:180px;width:155px;">
+                                   <img haoroomslazyload="{{ url_for('static',filename='img/medical-2.jpg')}}" src="" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       <br>
+                                       欧姆龙电子血压计测量仪U10L家用老人臂式全自动量测仪器正品医用
+                                   </div>
+                                   <p class="mi_price">￥179</p>
+                               </div>
+                               <div style="height:180px;width:155px;">
+                                   <img haoroomslazyload="{{ url_for('static',filename='img/medical-3.jpg')}}" src="" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       <br>
+                                       海昌美瞳隐形眼镜星眸半年抛2片装官网正品网红同款护理液
+                                   </div>
+                                   <p class="mi_price">￥34.6</p>
+                               </div>
+                           </div>
+                       </a>
+                   </div>
+                   <div class="miuntes_div img">
+                       <a href="#" class="miuntes_a" style="text-decoration: none;">
+                           <img src="{{ url_for('static',filename='img/3c.jpg')}}" height=300 width=550 alt="">
+                           <div class="minutes">
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/3c-1.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       奥克斯电热水龙头即热式电热水器厨房快速加热速热厨宝卫生间冷热
+                                   </div>
+                                   <p class="mi_price">￥75</p>
+                               </div>
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/3c-2.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       【122.55元抢1000件，抢完恢复129元】TCL电热水龙头侧进水数显速热水龙头厨房过水热快速电水龙头厨宝
+                                   </div>
+                                   <p class="mi_price">￥122.55</p>
+                               </div>
+                               <div style="height:180px;width:155px;">
+                                   <img src="{{ url_for('static',filename='img/3c-3.jpg')}}" width="155" height="155" alt="">
+                                   <div style="height:90px;">
+                                       彩虹电热毯单人安全双控调温无三人学生宿舍辐射家用小电褥子双人
+                                   </div>
+                                   <p class="mi_price">￥79</p>
+                               </div>
+                           </div>
+                       </a>
+                   </div>
+               </div>
+
+                <script>
+                    {# 懒加载 #}
+                    $(window).bind("scroll", function(event){
+                    $(".img a img").each(function(){
+                              //窗口的高度+看不见的顶部的高度=屏幕低部距离最顶部的高度
+                                var thisButtomTop = parseInt($(window).height()) + parseInt($(window).scrollTop());
+                                var thisTop = parseInt($(window).scrollTop()); //屏幕顶部距离最顶部的高度
+                                    var PictureTop = parseInt($(this).offset().top);
+                                     if (PictureTop >= thisTop && PictureTop <= thisButtomTop && $(this).attr("haoroomslazyload") != $(this).attr("src")) {
+                                       $(this).attr("src", $(this).attr("haoroomslazyload"));
+                                     }
+                    });
+
+                    })
+                </script>
+               <div style="text-align: center;position:relative;height:50px;font-size:20px;width:100%;margin-top:100px;">
+                    @ 2019 flask.shopping.com 晋ICP备 131110532号-1
+               </div>
+            </div>{# 秒杀 #}
+
+            <div class="tab-pane" id="tab4" style="padding-top:40px;"> {# 家居 #}
+              <script>
+                  let color_list=['#b7ff4a','#ffff37','#ffdc35','#ffaf60','#ff9d6f','#79ff79','#4dFFFF','#46a3ff'];
+                  setInterval(()=>{
+                      $('.home')[0].style.backgroundColor=color_list[Math.floor(Math.random()*8)];
+                      $('.home')[1].style.backgroundColor=color_list[Math.floor(Math.random()*8)];
+                      $('.home')[2].style.backgroundColor=color_list[Math.floor(Math.random()*8)];
+                  },1500)
+              </script>
+              <div class="home">发现新趣&惊喜</div>
+              <div style="margin-top:45px;">
+                  <a href="#" style="display: block;">
+                      <img src="{{ url_for('static',filename='img/interstate-0.png')}}" height="433" width="100%" alt="">
+                  </a>
+              </div>
+              <div class="home_line1">
+                  <div>
+                      <a href="#" style="display: block;">
+                          <img src="{{ url_for('static',filename='img/interstate-1.png')}}" height="400" width="550" alt="">
+                      </a>
+                  </div>
+                  <div>
+                      <a href="#" style="display: block;">
+                          <img src="{{ url_for('static',filename='img/interstate-2.png')}}" height="400" width="550" alt="">
+                      </a>
+                  </div>
+              </div>
+              <div class="home" style="margin-top:40px;">生活&灵感</div>
+              <div class="home_line1-1 home_1">
+                  <div>
+                      <a href="#" style="display: block;">
+                          <img src="{{ url_for('static',filename='img/interstate-1_1.png')}}" height="300" width="300" alt="">
+                          <div class="home_temp">餐桌布置</div>
+                      </a>
+                  </div>
+                  <div>
+                      <a href="#" style="display: block;">
+                          <img src="{{ url_for('static',filename='img/interstate-1_2.png')}}" height="300" width="300" alt="">
+                          <div class="home_temp">萌宠生活</div>
+                      </a>
+                  </div>
+                  <div>
+                      <a href="#" style="display: block;">
+                          <img src="{{ url_for('static',filename='img/interstate-1_3.png')}}" height="300" width="300" alt="">
+                          <div class="home_temp">氛围照明</div>
+                      </a>
+                  </div>
+              </div>
+              <div class="home" style="margin-top:40px;">明星系列</div>
+              {#轮播图#}
+              <div class="control-box">
+				<ul>
+					<li class="prev">
+						<img src="{{ url_for('static',filename='images/left_02.png')}}" alt="prev">
+					</li>
+					<li class="next">
+						<img src="{{ url_for('static',filename='images/right_02.png')}}" alt="next">
+					</li>
+				</ul>
+				<div class="bigbox">
+					<div id="switcher">
+						<div class="content_1">
+							<div class="box" style="background-image: url('{{ url_for('static',filename='images/home_1.png')}}');">
+								<div class="shadow">
+									<a href="#" >EKTORP 爱克托 系列</a>
+								</div>
+							</div>
+							<div class="box" style="background-image: url('{{ url_for('static',filename='images/home_2.png')}}');">
+								<div class="shadow">
+									<a href="#">爱克托 系列</a>
+								</div>
+							</div>
+							<div class="box" style="background-image: url('{{ url_for('static',filename='images/home_3.png')}}');">
+								<div class="shadow">
+									<a href="#">ORP 系列 </a>
+								</div>
+							</div>
+							<div class="box" style="background-image: url('{{ url_for('static',filename='images/home_4.png')}}');">
+								<div class="shadow">
+									<a href="#">克托 系列</a>
+								</div>
+							</div>
+						</div>
+						<div class="content_2"></div>
+                        <script type="text/javascript" src="{{ url_for('static',filename='js_home/sliderx.js')}}"></script>
+					</div>
+				</div>
+			</div>
+              <div style="text-align: center;position:relative;height:50px;font-size:20px;width:100%;margin-top:100px;">
+                    @ 2019 flask.shopping.com 晋ICP备 131110532号-1
+              </div>
+
+            </div>{# 家居 #}
+
+            <div class="tab-pane" id="tab5" style="padding-top:40px;">{# 数码 #}
+              <div style="height:450px;margin:0 auto;display: flex;flex-wrap: nowrap;justify-content: space-between;">
+                  <div style="width: 200px;height:400px;position:relative;float:left;">
+                      <a href="#" style="display: block;">
+                          <img src="{{ url_for('static',filename='img/3c-01.jpg')}}" alt="" height="400" width="230">
+                      </a>
+                      <br>
+                      <p style="position:relative;color:darkolivegreen">尼康相机<span style="position:relative;right:-90px">佳能相机</span></p>
+                      <br>
+                      <p style="position:relative;color:darkolivegreen">索尼相机<span style="position:relative;right:-90px">富士相机</span></p>
+                      <br>
+                      <p style="position:relative;color:darkolivegreen">徕卡相机<span style="position:relative;right:-90px">宾得相机</span></p>
+                  </div>
+                  <div style=";float:left;margin-left:15px;text-align: center;">
+                      <div style="display: flex;flex-wrap: nowrap;justify-content: space-between;">
+                          <a href="#" class="c3c" style="text-decoration: none;">
+                            <img src="{{ url_for('static',filename='img/3c-02.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">璐朗德 Luland 产超大画幅 CQ-100球型云台 球形云台</p>
+                            <p class="mi_price">￥1998</p>
+                          </a>
+                          <a href="#" class="c3c" style="text-decoration: none;">
+                            <img src="{{ url_for('static',filename='img/3c-03.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">ZWO ASI290MM Mini导星天文相机1/3" USB2.0 TypeC口 ST4导星</p>
+                            <p class="mi_price">￥1980</p>
+                          </a>
+                          <a href="#" class="c3c" style="text-decoration: none;">
+                            <img src="{{ url_for('static',filename='img/3c-04.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">Canon/佳能 PowerShot SX720 HS  40倍光学变焦</p>
+                            <p class="mi_price">￥1900</p>
+                          </a>
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-05.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">ELMO QBiC MS-1 迷你照相机 超广角 185度93克可挂Iphone手机摄像</p>
+                            <p class="mi_price">￥1998</p>
+                          </a>
+                      </div>
+
+                      <div style="display: flex;flex-wrap: nowrap;justify-content: space-between;margin-top:35px;">
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-06.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">全新正品 Panasonic/松下 HC-V230M 高清数码摄像机 50倍光学变焦</p>
+                            <p class="mi_price">￥1800</p>
+                          </a>
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-07.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">中一光学超大光圈 m43口 25mm F0.95全画幅手动MFT镜头GH4 BMPCC</p>
+                            <p class="mi_price">￥2400</p>
+                          </a>
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-08.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">Nikon/尼康AF-S 60mm f/2.8G ED微距镜头 定焦全画幅</p>
+                            <p class="mi_price">￥3500</p>
+                          </a>
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-09.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">适马 18-200 mmf/3.5-6.3DC Macro OS HSM三代微距防抖 大陆行货</p>
+                            <p class="mi_price">￥1750</p>
+                          </a>
+                      </div>
+                  </div>
+              </div>
+              <div style="height:450px;margin-top:130px;display: flex;flex-wrap: nowrap;justify-content: space-between;">
+                  <div style="width: 200px;height:400px;position:relative;float:left;">
+                      <a href="#" style="display: block;">
+                          <img src="{{ url_for('static',filename='img/3c-01.jpg')}}" alt="" height="400" width="230">
+                      </a>
+                      <br>
+                      <p style="position:relative;color:darkolivegreen">尼康相机<span style="position:relative;right:-90px">佳能相机</span></p>
+                      <br>
+                      <p style="position:relative;color:darkolivegreen">索尼相机<span style="position:relative;right:-90px">富士相机</span></p>
+                      <br>
+                      <p style="position:relative;color:darkolivegreen">徕卡相机<span style="position:relative;right:-90px">宾得相机</span></p>
+                  </div>
+                  <div style=";float:left;margin-left:15px;text-align: center;">
+                      <div style="display: flex;flex-wrap: nowrap;justify-content: space-between;">
+                          <a href="#" class="c3c" style="text-decoration: none;">
+                            <img src="{{ url_for('static',filename='img/3c-02.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">璐朗德 Luland 产超大画幅 CQ-100球型云台 球形云台</p>
+                            <p class="mi_price">￥1998</p>
+                          </a>
+                          <a href="#" class="c3c" style="text-decoration: none;">
+                            <img src="{{ url_for('static',filename='img/3c-03.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">ZWO ASI290MM Mini导星天文相机1/3" USB2.0 TypeC口 ST4导星</p>
+                            <p class="mi_price">￥1980</p>
+                          </a>
+                          <a href="#" class="c3c" style="text-decoration: none;">
+                            <img src="{{ url_for('static',filename='img/3c-04.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">Canon/佳能 PowerShot SX720 HS  40倍光学变焦</p>
+                            <p class="mi_price">￥1900</p>
+                          </a>
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-05.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">ELMO QBiC MS-1 迷你照相机 超广角 185度93克可挂Iphone手机摄像</p>
+                            <p class="mi_price">￥1998</p>
+                          </a>
+                      </div>
+
+                      <div style="display: flex;flex-wrap: nowrap;justify-content: space-between;margin-top:35px;">
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-06.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">全新正品 Panasonic/松下 HC-V230M 高清数码摄像机 50倍光学变焦</p>
+                            <p class="mi_price">￥1800</p>
+                          </a>
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-07.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">中一光学超大光圈 m43口 25mm F0.95全画幅手动MFT镜头GH4 BMPCC</p>
+                            <p class="mi_price">￥2400</p>
+                          </a>
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-08.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">Nikon/尼康AF-S 60mm f/2.8G ED微距镜头 定焦全画幅</p>
+                            <p class="mi_price">￥3500</p>
+                          </a>
+                          <a href="#" style="display: block;text-decoration: none">
+                            <img src="{{ url_for('static',filename='img/3c-09.jpg')}}" alt="" height="200" width="200">
+                            <p class="protwo-title">适马 18-200 mmf/3.5-6.3DC Macro OS HSM三代微距防抖 大陆行货</p>
+                            <p class="mi_price">￥1750</p>
+                          </a>
+                      </div>
+                  </div>
+              </div>
+              <div style="text-align: center;position:relative;height:50px;font-size:20px;width:100%;margin-top:100px;">
+                    @ 2019 flask.shopping.com 晋ICP备 131110532号-1
+              </div>
+            </div>{# 数码 #}
+
+       </div>
+    </div>
+
+{% endblock %}
+

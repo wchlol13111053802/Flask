@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;width:100%;">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.css') }}">
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1314135_chl3ssxf93l.css">
+</head>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        text-decoration: none;
+        outline: none;
+        list-style: none;
+
+    }
+    a{
+        text-decoration: none;
+    }
+    input:focus { outline: none; }
+</style>
+<body style="background-color:white;height: 100%;min-width:1096px;">
+    <div style="position:relative; width:100%;min-height:100%;">
+        <Header style="max-width:100%;text-align: center;border-bottom:1px solid #9b9b9b;height:80px;font-size:30px;padding-left:40px;padding-right:40px;">
+        <div style="display: flex;flex-wrap: nowrap;justify-content: space-around;">
+            <div style="margin-left:50px;background: url('{{ url_for('static',filename='img/logo.png') }}') no-repeat;background-size:cover;width:80px;height:79px;">
+            </div>
+            <div class="time" style="line-height: 70px;font-size: 20px;">loading...</div>
+            <script>
+                setInterval(()=>{
+                    let day = new Date();
+                    $('.time')[0].innerText = day.toLocaleString();
+                },1000);
+
+            </script>
+            <div style="line-height: 70px;">
+                <div style="float:left;margin-top:20px;">
+                    <input type="text" class="form-control" placeholder="小米电脑">
+                </div>
+                <button  style="float:left;margin-top:20px;" type="submit" class="btn btn-default">搜索</button>
+            </div>
+            <div style="display: flex;flex-wrap: nowrap;justify-content: space-around;margin-right:50px;font-size:20px;line-height: 70px;">
+                <div>&nbsp;&nbsp;</div>
+                <div>
+                    <a href="" class="shop_car"  style="text-decoration: none;" ><span class="iconfont icon-gouwudai" style="font-size: 20px;"></span>购物车</a>
+                </div>
+                <div>&nbsp;&nbsp;</div>
+                <div style="width:35px;height:35px;margin-top:20px;border-radius:50%;overflow: hidden;"><img style="position:relative;width:35px;height:35px;display: block" src="data:image/{{ data.type }};base64,{{ data.icon }}" alt=""></div>
+                <div style="padding:0 auto;" >
+                    {% if 'icon' in data.keys() %}
+                        <a href="{{ url_for('home.index') }}"  style="text-decoration: none;" class="login">
+                            退出
+                        </a>
+                    {% else %}
+                    <a href="{{ url_for('home.login') }}" class="login" style="text-decoration: none;" target="_blank"><span class="iconfont icon-yonghu" style="font-size: 20px;"></span>
+                        登录
+                    </a>
+                    {% endif %}
+                </div>
+                <div>&nbsp;&nbsp;</div>
+                <div>
+                    {% if 'icon' not in data.keys() %}
+                    <a href="{{ url_for('home.register') }}" style="text-decoration: none; " target="_blank"><span class="iconfont icon-zhuceyaoqing" style="font-size: 20px;"></span>注册</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div></div>
+        <script>
+                 $('.shop_car').click(()=>{
+                     let flag = window.location.href.split('/')[3].split('=')[0]
+                     alert(flag);
+                     if('?name' === flag)
+                     {
+                         window.open('/shop_car/')
+                     }
+                 });
+                {#console.log(window.location.href.split('/')[3].split('=')[0]);#}
+        </script>
+    </Header>
+    <section style="width: 100%;padding:90px;position:relative;min-height:800px;">
+        {% block content %}{% endblock %}
+        <script>
+                //回到顶部
+        function goTop(){
+            $('html,body').animate({'scrollTop':0},600);
+
+
+        }
+        </script>
+        <div class="side" style="position:fixed;z-index: 50;left:10px;top:46%;">
+            <ul style="position:relative;background-color: #744218;">
+                <li><div  style="text-decoration: none;cursor:pointer;" id="ch"><div class="sidebox"><img src="{{ url_for('static',filename='img/side_icon01.png')}}">客服中心</div></div></li>
+                <li class="top" style="border:none;"><div onclick="goTop();" style="cursor:pointer;text-decoration: none;" class="sidetop"><img src="{{ url_for('static',filename='img/side_icon05.png')}}">回到顶部</div></li>
+            </ul>
+        </div>
+        <div id="chat" style="position:fixed;z-index: 90;display:none;left:0;background: white;height:400px;width:300px;bottom:0;">
+            <div style="height:350px;overflow: hidden">
+                <p style="height:5px;width:315px;background-color: #2aabd2;"></p><span id="close" style="cursor:pointer;float:right;display: block;color:red;width:15px;text-align: center;">X</span>
+                <br>
+                <br>
+                <div style="height:320px;width:315px;overflow-y: scroll">
+                    <div style="text-align: left;" id="server"><p></p></div>
+                    <div style="text-align: right;" id="client"><p></p></div>
+                </div>
+
+            </div>
+            <div style="height:50px;" class="form-group">
+                <input id="msg" title="" class="form-control" type="text" style="width:220px;display: block;float: left;">
+                <button id="send" type="button" class="btn btn-default" style="width:80px;float: left;">发送</button>
+            </div>
+        </div>
+        <script>
+
+            $('#send').click(()=>{
+                {#let p = '<p>'+$('#msg')[0].value+'</p>';#}
+                let p = document.createElement('p');
+                p.innerText=$('#msg')[0].value;
+                $('#client')[0].appendChild(p);
+                new WebSocket("/chat" + $('#msg')[0].value);
+                $.ajax({
+                    url:'/chat',
+                    type:'post',
+                    data: $('#msg')[0].value,
+                    success:function(data){
+                        $.ajax({
+                            url:'/back',
+                            type:'get',
+                            success:function(data){
+                                let b = document.createElement('p');
+                                b.innerText=data;
+                                $('#server')[0].appendChild(b);
+                            }
+                        });
+
+                       alert('12132');
+
+                    },
+                    error:function(response){
+                        console.log(response.status);
+                    }
+                });
+            });
+
+
+            $('#close').click(()=>{
+                $('#chat')[0].style.display='none';
+            });
+            $('#ch').click(()=>{
+                $('#chat')[0].style.display='block';
+            });
+            if($(document).scrollTop===800){
+                $(".top").display="block";
+                console.log('jljlj;')
+            }
+            else
+            {
+                $(".top").display="none";
+            }
+        </script>
+
+
+    </section>
+    </div>
+
+</body>
+</html>

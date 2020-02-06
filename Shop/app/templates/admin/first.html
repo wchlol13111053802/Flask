@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.css') }}">
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/echarts.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+</head>
+<style>
+
+.list{
+    width:12%;
+    float:left;
+    padding-top:20px;
+    font-size:20px;
+    background-color: #1b1a3e;
+    color:white;
+    text-align: center;
+    min-height:700px;
+    max-height:100%;
+}
+.list div:hover
+{
+    background-color: #393682;
+    cursor:pointer;
+}
+.main{
+    width:86%;
+    margin-left:2%;
+    min-height:700px;
+    max-height:100%;
+    float:left;
+    overflow-y: hidden;
+}
+.icon{
+    height: 50px;
+    width:50px;
+    border-radius:50%;
+    overflow: hidden;
+    position:relative;
+    top:1px;
+    cursor:pointer;
+    margin-right:1%;
+    float:right;
+}
+.clock{
+    position:relative;
+    top:-6px;
+    margin-right:6%;
+    float:right;
+}
+.shadow{
+
+    z-index: 20;
+    width:60px;
+    position:absolute;
+    right:1%;
+    top:50px;
+    height: 60px;
+
+
+}
+
+.line{
+    height:13px;
+    font-size: 15px;
+    margin-top:10px;
+    line-height: 13px;
+}
+</style>
+<body style="list-style: none;outline-style: none;background-color:#f3f3f3;">
+  <header style="height:50px;background:#93d9ff;line-height: 50px;color:black;">
+      <div class="icon">
+         {# 头像 #} <img src="{{ url_for('static',filename='img/logo.png') }}" height="50" width="50" style="position:relative;right:0;" alt="">
+      </div>
+      <div class="shadow">
+          <div class="inside" style="background-color: rgb(254,255,253);display:none;overflow: hidden;height:62px;border-radius: 6px;">
+            <div class="line"><a href="#" style="text-decoration: none;">更改密码</a></div>
+            <div class="line"><a href="/admin" style="text-decoration: none;">退出登录</a></div>
+          </div>
+      </div>
+      <script>
+          $('.icon').click(()=>{
+             $('.inside').toggle();
+          });
+
+      </script>
+      <div class="clock"> {# 时间板 #}
+          <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+          </div>
+          <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+          </div>
+          <em class="divider">:</em>
+          <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+          </div>
+          <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+          </div>
+          <em class="divider">:</em>
+          <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+          </div>
+          <div class="flip">
+            <div class="digital front" data-number="0"></div>
+            <div class="digital back" data-number="1"></div>
+          </div>
+      </div>
+
+      <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+      <div style="font-size: 20px;float:left;font-weight: bold;color:deepskyblue;padding-left:25px;">宏小圣管理系统</div>
+  </header>
+  <div class="list">
+      <div id="1" onclick="clicks(1)">数据图表</div>
+      <div id="2" onclick="clicks(2)">订单报表</div>
+      <div id="3" onclick="clicks(3)">商品管理</div>
+      <div id="4" onclick="clicks(4)">用户管理</div>
+      <div id="5" onclick="clicks(5)">用户日志</div>
+      <div id="6" onclick="clicks(6)">操作日志</div>
+  </div>
+  <div class="main">
+      <div id="s1" style="width:100%;height:700px;text-align: center;background-color: #f0f0f0">
+          <div>
+              <div style="float:left;height:130px;width:20%;border-radius:30px;line-height:130px;background-color: #cccccc;font-size: 30px;">访问量<span>120</span></div>
+              <div style="float:left;height:130px;width:20%;margin-left:20%;line-height:130px;border-radius:30px;font-size: 30px;background-color: #cccccc">购物量<span>110</span></div>
+              <div style="float:right;height:130px;width:20%;margin-left:20%;line-height:130px;border-radius:30px;font-size: 30px;background-color: #cccccc">付款量<span>140</span></div>
+          </div>
+          <div style="position:relative;top:20px;width:100%;display: flex;flex-wrap: nowrap;justify-content: space-between;">
+              <div id="main" style="width: 300px;height:300px;background-color:white;left:0;position:relative;"></div>
+              <div id="ls" style="position:relative;width: 300px;height:300px;background-color:white;"></div>
+              <div id="td" style="width: 300px;height:300px;background-color:white;"></div>
+              <div id="da" style="width: 300px;height:300px;background-color:white;"></div>
+          </div>
+          <div id="last" style="margin-top:30px;width:100%;height:200px;"></div>
+          <script>
+              var myChart = echarts.init(document.getElementById('main'));
+              var app = echarts.init(document.getElementById('ls'));
+              var dot = echarts.init(document.getElementById('td'));
+              var last = echarts.init(document.getElementById('last'));
+              var da = echarts.init(document.getElementById('da'));
+              option = { {# 环图 #}
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 10,
+                        data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                    },
+                    series: [
+                        {
+                            name: '访问来源',
+                            type: 'pie',
+                            radius: ['50%', '70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: 'center'
+                                },
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontSize: '30',
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: [
+                                {value: 335, name: '直接访问'},
+                                {value: 310, name: '邮件营销'},
+                                {value: 234, name: '联盟广告'},
+                                {value: 135, name: '视频广告'},
+                                {value: 1548, name: '搜索引擎'}
+                            ]
+                        }
+                    ]
+                };
+               myChart.setOption(option);
+
+               {#柱状图#}
+              var posList = [
+                    'left', 'right', 'top', 'bottom',
+                    'inside',
+                    'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+                    'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+                ];
+
+              app.configParameters = {
+                    rotate: {
+                        min: -90,
+                        max: 90
+                    },
+                    align: {
+                        options: {
+                            left: 'left',
+                            center: 'center',
+                            right: 'right'
+                        }
+                    },
+                    verticalAlign: {
+                        options: {
+                            top: 'top',
+                            middle: 'middle',
+                            bottom: 'bottom'
+                        }
+                    },
+                    position: {
+                        options: echarts.util.reduce(posList, function (map, pos) {
+                            map[pos] = pos;
+                            return map;
+                        }, {})
+                    },
+                    distance: {
+                        min: 0,
+                        max: 100
+                    }
+                };
+
+              app.config = {
+                    rotate: 90,
+                    align: 'left',
+                    verticalAlign: 'middle',
+                    position: 'insideBottom',
+                    distance: 15,
+                    onChange: function () {
+                        var labelOption = {
+                            normal: {
+                                rotate: app.config.rotate,
+                                align: app.config.align,
+                                verticalAlign: app.config.verticalAlign,
+                                position: app.config.position,
+                                distance: app.config.distance
+                            }
+                        };
+                        myChart.setOption({
+                            series: [{
+                                label: labelOption
+                            }, {
+                                label: labelOption
+                            }, {
+                                label: labelOption
+                            }, {
+                                label: labelOption
+                            }]
+                        });
+                    }
+                };
+
+
+              var labelOption = {
+                    show: true,
+                    position: app.config.position,
+                    distance: app.config.distance,
+                    align: app.config.align,
+                    verticalAlign: app.config.verticalAlign,
+                    rotate: app.config.rotate,
+                    formatter: '{c}  {name|{a}}',
+                    fontSize: 16,
+                    rich: {
+                        name: {
+                            textBorderColor: '#fff'
+                        }
+                    }
+                };
+
+              option1 = {
+                    color: ['#003366', '#006699', '#4cabce', '#e5323e'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['Forest', 'Steppe', 'Desert', 'Wetland']
+                    },
+                    toolbox: {
+                        show: true,
+                        orient: 'vertical',
+                        left: 'right',
+                        top: 'center',
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {show: false},
+                            data: ['2012', '2013', '2014', '2015', '2016']
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Forest',
+                            type: 'bar',
+                            barGap: 0,
+                            label: labelOption,
+                            data: [320, 332, 301, 334, 390]
+                        },
+                        {
+                            name: 'Steppe',
+                            type: 'bar',
+                            label: labelOption,
+                            data: [220, 182, 191, 234, 290]
+                        },
+                        {
+                            name: 'Desert',
+                            type: 'bar',
+                            label: labelOption,
+                            data: [150, 232, 201, 154, 190]
+                        },
+                        {
+                            name: 'Wetland',
+                            type: 'bar',
+                            label: labelOption,
+                            data: [98, 77, 101, 99, 40]
+                        }
+                    ]
+                };
+              app.setOption(option1);
+               {#折线图#}
+              function genData(len, offset) {
+                var lngRange = [-10.781327, 131.48];
+                var latRange = [18.252847, 52.33];
+
+                var arr = new Float32Array(len * 2);
+                var off = 0;
+
+                for (var i = 0; i < len; i++) {
+                    var x = +Math.random() * 10;
+                    var y = +Math.sin(x) - x * (len % 2 ? 0.1 : -0.1) * Math.random() + (offset || 0) / 10;
+                    arr[off++] = x;
+                    arr[off++] = y;
+                }
+                return arr;
+            }
+
+              var data1 = genData(5e5);
+              var data2 = genData(5e5, 10);
+
+              option2 = {
+                title: {
+                    text: echarts.format.addCommas(data1.length / 2 + data2.length / 2) + ' Points'
+                },
+                tooltip: {},
+                toolbox: {
+                    left: 'center',
+                    feature: {
+                        dataZoom: {}
+                    }
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10
+                },
+                xAxis: [{
+                }],
+                yAxis: [{
+                }],
+                dataZoom: [{
+                    type: 'inside'
+                }, {
+                    type: 'slider'
+                }],
+                animation: false,
+                series: [{
+                    name: 'A',
+                    type: 'scatter',
+                    data: data1,
+                    dimensions: ['x', 'y'],
+                    symbolSize: 3,
+                    itemStyle: {
+                        opacity: 0.4
+                    },
+                    large: true
+                }, {
+                    name: 'B',
+                    type: 'scatter',
+                    data: data2,
+                    dimensions: ['x', 'y'],
+                    symbolSize: 3,
+                    itemStyle: {
+                        opacity: 0.4
+                    },
+                    large: true
+                }]
+            };
+
+              option3 = {
+                    title: {
+                        text: '折线图堆叠'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name: '邮件营销',
+                            type: 'line',
+                            stack: '总量',
+                            data: [120, 132, 101, 134, 90, 230, 210]
+                        },
+                        {
+                            name: '联盟广告',
+                            type: 'line',
+                            stack: '总量',
+                            data: [220, 182, 191, 234, 290, 330, 310]
+                        },
+                        {
+                            name: '视频广告',
+                            type: 'line',
+                            stack: '总量',
+                            data: [150, 232, 201, 154, 190, 330, 410]
+                        },
+                        {
+                            name: '直接访问',
+                            type: 'line',
+                            stack: '总量',
+                            data: [320, 332, 301, 334, 390, 330, 320]
+                        },
+                        {
+                            name: '搜索引擎',
+                            type: 'line',
+                            stack: '总量',
+                            data: [820, 932, 901, 934, 1290, 1330, 1320]
+                        }
+                    ]
+                };
+
+              option4 = { {# 雷达图 #}
+                title: {
+                    text: ''
+                },
+                tooltip: {},
+                legend: {
+                    data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）']
+                },
+                radar: {
+                    // shape: 'circle',
+                    name: {
+                        textStyle: {
+                            color: '#fff',
+                            backgroundColor: '#999',
+                            borderRadius: 3,
+                            padding: [3, 5]
+                        }
+                    },
+                    indicator: [
+                        { name: '销售（sales）', max: 6500},
+                        { name: '管理（Administration）', max: 16000},
+                        { name: '信息技术（Information Techology）', max: 30000},
+                        { name: '客服（Customer Support）', max: 38000},
+                        { name: '研发（Development）', max: 52000},
+                        { name: '市场（Marketing）', max: 25000}
+                    ]
+                },
+                series: [{
+                    name: '预算 vs 开销（Budget vs spending）',
+                    type: 'radar',
+                    // areaStyle: {normal: {}},
+                    data: [
+                        {
+                            value: [4300, 10000, 28000, 35000, 50000, 19000],
+                            name: '预算分配（Allocated Budget）'
+                        },
+                        {
+                            value: [5000, 14000, 28000, 31000, 42000, 21000],
+                            name: '实际开销（Actual Spending）'
+                        }
+                    ]
+                }]
+            };
+
+              da.setOption(option4)
+              last.setOption(option3);
+              dot.setOption(option2);
+          </script>
+      </div>
+
+      <div id="s2" style="display:none;">
+          <div>
+              <h2 style="color: #49ff3f">
+                 用户订单数据表
+              </h2>
+          </div>
+          <div class="table-responsive">
+              <table class="table table-bordered">
+                <tr style="font-weight: bold;">
+                  <td>用户</td>
+                  <td>订单量</td>
+                  <td>完成数</td>
+                  <td>总支付</td>
+                  <td>实际支付</td>
+                </tr>
+                  {% for data in data %}
+                <tr>
+                  <td>{{ data.user }}</td>
+                  <td>{{ data.order}}</td>
+                  <td>{{ data.success}}</td>
+                  <td>{{ data.pay}}</td>
+                  <td>{{ data.relpay}}</td>
+                </tr>
+                {% endfor %}
+              </table>
+          </div>
+          <nav aria-label="Page navigation">
+              <ul class="pagination">
+                <li>
+                  <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                {% for i in range(1,data[0]['num']) %}
+                <li><a href="#">{{ i }}</a></li>
+                {% endfor %}
+                <li>
+                  <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+          </nav>
+      </div>
+      <div id="s3" style="display:none;overflow-y: scroll;height:700px;">
+          <h2>
+              商品管理
+          </h2>
+          <div class="table-responsive">
+              <table class="table table-bordered">
+                <tr style="font-weight: bold;">
+                  <td>库存</td>
+                  <td>商品名</td>
+                  <td>入库时间</td>
+                  <td>花费</td>
+                  <td>类别</td>
+                  <td>操作</td>
+                </tr>
+                  {% for i in con %}
+                <tr id="{{ i.id }}hidden">
+                  <td id="{{ i.id }}orign">{{i.number}}</td>
+
+                  <td id="{{ i.id }}orign1">{{i.name}}</td>
+
+                  <td id="{{ i.id }}orign2">{{i.addTime}}</td>
+
+                  <td id="{{ i.id }}orign3">{{i.price}}</td>
+
+                  <td id="{{ i.id }}orign4">{{i.goods_class}}</td>
+
+                  <td>
+                      <p>
+                          <button type="button" class="btn btn-danger btn-xs" id="{{ i.id }}" onclick="dele_goods({{ i.id }})">删除</button>
+                      </p>
+                  </td>
+
+                </tr>
+                <tr>
+                   <td><h6>下面修改表中库存</h6></td>
+                   <td><h6>下面修改表中商品名</h6></td>
+                   <td><h6>下面修改表中入库时间</h6></td>
+                   <td><h6>下面修改表中花费</h6></td>
+                   <td><h6>下面修改表中类别</h6></td>
+                    <td><h6>不可修改</h6></td>
+                </tr>
+                <tr id="{{ i.id }}hidden">
+
+                  <td id="{{ i.id }}modify" class="{{ i.id }}show" ><input title="" value="{{i.number}}" type="text"></td>
+
+                  <td id="{{ i.id }}modify1" class="{{ i.id }}show" ><input title="" value="{{i.name}}" type="text"></td>
+
+                  <td id="{{ i.id }}modify2" class="{{ i.id }}show" ><input title="" value="{{i.addTime}}" type="text"></td>
+
+                  <td id="{{ i.id }}modify3" class="{{ i.id }}show" ><input title="" value="{{i.price}}" type="text"></td>
+
+                  <td id="{{ i.id }}modify4" class="{{ i.id }}show" ><input title="" value="{{i.goods_class}}" type="text"></td>
+
+                  <td>
+                      <p>
+                          <button type="button" class="btn btn-info btn-xs" id="{{ i.id }}" onclick="update_goods({{ i.id }})">确定</button>
+
+                      </p>
+                  </td>
+
+                </tr>
+                <tr style="background-color: #666666">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+              </table>
+          </div>
+
+          <div>
+               <div class="table-responsive">
+              <table class="table table-bordered">
+                <tr style="font-weight: bold;">
+                  <td>库存</td>
+                  <td>商品名</td>
+                  <td>入库时间</td>
+                  <td>花费</td>
+                  <td>分类</td>
+                  <td>操作</td>
+                </tr>
+                 <tr>
+                     <td><input id="number" title="" type="text"></td>
+                     <td><input id="name" title="" type="text"></td>
+                     <td class="time" id="time"></td>
+                     <td><input title="" type="text" id="price"></td>
+                     <td ><input title="" type="text" id="state"></td>
+                     <td><button type="button" class="btn btn-success btn-xs" onclick="add_goods()">添加</button></td>
+                 </tr>
+              </table>
+                   <script>
+                       let date = new Date();
+                       let DATA = new FormData();
+                       $('.time')[0].innerText= date.getFullYear()+'-'+date.getMonth()+1+'-'+date.getDate();
+
+                       function dele_goods(id)
+                       {
+
+                           $.ajax({
+                                   url:'/admin/goods/dele',
+                                   type:'post',
+                                   dataType:'json',
+                                   data:JSON.stringify({'id':id}),
+                           });
+                       }
+
+                       function update_goods(id)
+                       {
+
+
+                       }
+
+
+
+                       function add_goods()
+                       {
+                           DATA['number'] = $('#number')[0].value;
+                           DATA['name'] = $('#name')[0].value;
+                           DATA['time'] = $('#time')[0].innerText;
+                           DATA['class'] = $('#state')[0].value;
+                           DATA['price'] = $('#price')[0].value
+                           if(  DATA['price']!==''&&DATA['number']!==''&&DATA['name']!==''&&DATA['time']!==''&&DATA['state']!=='')
+                           {
+                               $.ajax({
+                                   url:'/admin/goods/',
+                                   type:'post',
+                                   dataType:'json',
+                                   data:JSON.stringify(DATA),
+                               });
+                              let location = location;
+                              location.replace(location.href);
+                           }
+                           else
+                           {
+                                console.dir(date);
+                                console.log(DATA);
+                           }
+
+                       }
+
+                   </script>
+              </div>
+          </div>
+      </div>
+      <div id="s4" style="display:none;">
+          <h2>用户管理</h2>
+          <div class="table-responsive">
+              <table class="table table-bordered">
+                <tr style="font-weight: bold;">
+                  <td>用户名</td>
+                  <td>密码</td>
+                  <td>注册时间</td>
+                  <td>手机号</td>
+                  <td>邮箱</td>
+                  <td>操作</td>
+                </tr>
+                  {% for data in user %}
+                <tr>
+                  <td>{{ data.name }}</td>
+                  <td>{{ data.pwd}}</td>
+                  <td>{{ data.addTime}}</td>
+                  <td>{{ data.phone}}</td>
+                  <td>{{ data.email}}</td>
+                  <td>
+                      <p>
+                          <button type="button" class="btn btn-danger btn-xs">删除</button>
+                      </p>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+          </div>
+      </div>
+      <div id="s5" style="display:none;">
+          <h2>用户日志</h2>
+          <div class="table-responsive">
+              <table class="table table-hover">
+              <tr>
+                  <td>用户名</td>
+                  <td>浏览商品量</td>
+                  <td>所待时间(/min)</td>
+              </tr>
+              <tr>
+                  <td>www</td>
+                  <td>5</td>
+                  <td>6</td>
+              </tr>
+          </table>
+          </div>
+      </div>
+      <div id="s6" style="display:none;">
+          <h2>操作日志</h2>
+          <div class="table-responsive">
+              <div class="panel panel-default">
+                  <div class="panel-body">
+
+                      <div style="float:left;text-align: left">处理完登录bug</div>
+                      <div style="float:right;text-align: right;">2020-1-29</div>
+                  </div>
+                  <div class="panel-body">
+
+                      <div style="float:left;text-align: left">优化页面</div>
+                      <div style="float:right;text-align: right;">2020-1-30</div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script>
+      function clicks(dom)
+      {
+          console.log(dom);
+          if(dom===1)
+          {   $(`#s${1}`)[0].style.display='block';
+              $(`#s${2}`)[0].style.display='none';
+              $(`#s${3}`)[0].style.display='none';
+              $(`#s${4}`)[0].style.display='none';
+              $(`#s${5}`)[0].style.display='none';
+              $(`#s${6}`)[0].style.display='none';
+          }
+          else if(dom===2)
+          {
+              $(`#s${1}`)[0].style.display='none';
+              $(`#s${2}`)[0].style.display='block';
+              $(`#s${3}`)[0].style.display='none';
+              $(`#s${4}`)[0].style.display='none';
+              $(`#s${5}`)[0].style.display='none';
+              $(`#s${6}`)[0].style.display='none';
+          }
+          else if(dom===3)
+          {
+              $(`#s${1}`)[0].style.display='none';
+              $(`#s${2}`)[0].style.display='none';
+              $(`#s${3}`)[0].style.display='block';
+              $(`#s${4}`)[0].style.display='none';
+              $(`#s${5}`)[0].style.display='none';
+              $(`#s${6}`)[0].style.display='none';
+          }
+          else if(dom===4)
+          {
+              $(`#s${1}`)[0].style.display='none';
+              $(`#s${2}`)[0].style.display='none';
+              $(`#s${3}`)[0].style.display='none';
+              $(`#s${4}`)[0].style.display='block';
+              $(`#s${5}`)[0].style.display='none';
+              $(`#s${6}`)[0].style.display='none';
+          }
+          else if(dom===5)
+          {
+              $(`#s${1}`)[0].style.display='none';
+              $(`#s${2}`)[0].style.display='none';
+              $(`#s${3}`)[0].style.display='none';
+              $(`#s${4}`)[0].style.display='none';
+              $(`#s${5}`)[0].style.display='block';
+              $(`#s${6}`)[0].style.display='none';
+          }
+          else if(dom===6)
+          {
+              $(`#s${1}`)[0].style.display='none';
+              $(`#s${2}`)[0].style.display='none';
+              $(`#s${3}`)[0].style.display='none';
+              $(`#s${4}`)[0].style.display='none';
+              $(`#s${5}`)[0].style.display='none';
+              $(`#s${6}`)[0].style.display='block';
+          }
+      }
+
+
+  </script>
+</body>
+</html>

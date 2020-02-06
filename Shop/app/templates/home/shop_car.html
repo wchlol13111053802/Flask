@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>shop_car</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.css') }}">
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
+</head>
+<style>
+    {#  弹性布局  #}
+    .flex{
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+    }
+</style>
+<body>
+    <Header style="text-align: center;border-bottom:1px solid #9b9b9b;height:80px;font-size:30px;padding-left:40px;padding-right:40px;">
+        <div style="display: flex;flex-wrap: nowrap;justify-content: space-around;">
+            <div style="margin-left:50px;background: url('{{ url_for('static',filename='img/logo.png') }}') no-repeat;background-size:cover;width:80px;height:79px;">
+            </div>
+            <div class="time" style="line-height: 70px;font-size: 20px;">loading...</div>
+            <script>
+                setInterval(()=>{
+                    let day = new Date();
+                    $('.time')[0].innerText = day.toLocaleString();
+                },1000);
+            </script>
+            <div style="line-height: 70px;">
+                <div style="float:left;margin-top:20px;">
+                    <input type="text" class="form-control" placeholder="小米电脑">
+                </div>
+                <button  style="float:left;margin-top:20px;" type="submit" class="btn btn-default">搜索</button>
+            </div>
+            <div style="display: flex;flex-wrap: nowrap;justify-content: space-around;margin-right:50px;font-size:20px;line-height: 70px;">
+                <div style="border-radius: 50%;width:60px;height:60px"><a href="" style="text-decoration: none;"><span class="iconfont icon-xiaoxi" style="font-size: 20px;"></span>消息</a></div>
+                <div>&nbsp;&nbsp;</div>
+                <div><img style="width:35px;height:35px;margin:0 10px;display: block" src="{{ url_for('static',filename='img/logo.png') }}" alt="..." class="img-circle"></div>
+                <div style="padding:0 auto;"><a href="{{ url_for('home.login') }}"  style="text-decoration: none;" target="_blank"><span class="iconfont icon-yonghu" style="font-size: 20px;"></span>退出</a>
+                </div>
+
+            </div>
+        </div>
+        <div></div>
+    </Header>
+    <section  style="background-color:white;height: 100%;min-width:1096px;padding:60px;">
+        {# 进度模块 #}
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">
+            订单完成度
+          </div>
+        </div>
+
+        {#  购物车模块 #}
+        <table class="table table-hover" style="text-align: center;">
+            <thead>
+              <tr>
+                  <td class="active">订单编号</td>
+                  <td class="active">商品名字</td>
+                  <td class="active">商品详情</td>
+                  <td class="active">价格/单价</td>
+                  <td class="active">数量</td>
+                  <td class="active">状态</td>
+              </tr>
+
+            </thead>
+            <tr>
+              <td class="warning">002314538</td>
+              <td class="warning">Redmi Note 8 Pro</td>
+              <td class="warning">4800万超清四射/高通骁龙655</td>
+              <td class="warning">￥999</td>
+              <td class="warning">1</td>
+              <td class="warning">
+                  <button class="btn btn-primary btn-lg btn-block btn-xs" >付款</button>
+              </td>
+            </tr>
+            {% if shop.values()!='' %}
+              <tr>
+                  <td class="warning">{{ shop.order_number }}</td>
+                  <td class="warning">{{ shop.name }}</td>
+                  <td class="warning">{{ shop.desc }}</td>
+                  <td class="warning">￥{{ shop.price }}</td>
+                  <td class="warning">{{ shop.number }}</td>
+                  <td class="warning">
+                      <button class="btn btn-primary btn-lg btn-block btn-xs" >{{ shop.status }}</button>
+                  </td>
+              </tr>
+            {% endif %}
+            <tr>
+              <td class="warning">002316898</td>
+              <td class="warning">Redmi Note 8 Pro</td>
+              <td class="warning">4800万超清四射/高通骁龙655</td>
+              <td class="warning">￥999</td>
+              <td class="warning">1</td>
+              <td class="warning">
+                  <button class="btn btn-primary btn-lg btn-block btn-xs">详情</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="warning">002316698</td>
+              <td class="warning">Redmi Note 8 Pro</td>
+              <td class="warning">4800万超清四射/高通骁龙655</td>
+              <td class="warning">￥999</td>
+              <td class="warning">1</td>
+              <td class="warning">
+                  <button class="btn btn-primary btn-lg btn-block btn-xs">收货</button>
+              </td>
+            </tr>
+        </table>
+
+        <div style="width:100%;height:35px" >
+            {#  付款模块 #}
+            <div class="flex" id="pay" style="display:none;">
+                <table class="table" style="text-align: center;">
+                    <tr>
+                      <td>002314538</td>
+                      <td>Redmi Note 8 Pro</td>
+                      <td>4800万超清四射/高通骁龙655</td>
+                      <td>￥999</td>
+                      <td></td>
+                      <td>
+                          <div style="width:420px;height:35px;position:relative;margin-right:0;">
+                            <div id="apli" style="float:right;margin-left:10px;background: url('{{ url_for('static',filename='img/apli.ico') }}');width:32px;height:32px;"></div>
+                            <div id="weichart" style="float:right;margin-left:10px;background: url('{{ url_for('static',filename='img/wei.png') }}');width:32px;height:32px;"></div>
+                            <div style="float:right;line-height: 35px;">
+                            请选择支付模式
+                            </div>
+                            </div>
+                      </td>
+                    </tr>
+                </table>
+
+            </div>
+            {# 详情模块 #}
+            <div id="detail" style="display:none;">
+               {# 物流模块 #}
+                <div style="background: url('{{ url_for('static',filename='img/map.gif') }}') no-repeat;background-size: cover;min-width:800px;min-height:440px;margin:0 auto;">
+                </div>
+            </div>
+            {# 收货模块  #}
+            <div id="address" style="display:none;text-align: center;font-size:40px;font-weight:bold;color:#337AB7;">
+                宏小圣收货成功
+            </div>
+        </div>
+
+    </section>
+    <script>
+
+        $(".btn").click(function(e)
+        {
+            let day = new Date();
+            let time_stamp = day.timeStamp;
+            if(e.target.innerText==='付款')
+            {
+                $('#pay')[0].style.display='block';
+                $('#detail')[0].style.display='none';
+                $('#address')[0].style.display='none';
+                $('#apli').click(function(){
+                    console.log('支付宝');
+                    $.ajax({
+                    url:'/pay/',
+                    dataType:'json',
+                    type:'POST',
+                    async: false,
+                    data: JSON.stringify({'time':time_stamp,'pay':'￥999','number':1,'name':'Redmi Note 8 Pro','flag':0,'method':'apli'}),
+                    success: function(data){
+                        console.log(data);
+                        if (data.status === 'ok') {
+                            img = data;
+                            alert('上传成功！');
+                        }
+
+                    },
+                    error:function(response){
+                        console.log(response.status);
+                    }
+                });
+                    console.log(e.target.innerText)
+                });
+                $('#weichart').click(function(){
+                    console.log('微信');
+                    $.ajax({
+                    url:'/pay/',
+                    dataType:'json',
+                    type:'POST',
+                    async: false,
+                    data: JSON.stringify({'time':time_stamp,'pay':'￥999','number':1,'name':'Redmi Note 8 Pro','flag':0,'method':'apli'}),
+                    success: function(data){
+                        console.log(data);
+                        if (data.status === 'ok') {
+                            img = data;
+                            alert('上传成功！');
+                        }
+
+                    },
+                    error:function(response){
+                        console.log(response.status);
+                    }
+                });
+                    console.log(e.target.innerText)
+                });
+                console.log(e.target.innerText)
+            }
+            else if(e.target.innerText==='详情')
+            {
+                $('#pay')[0].style.display='none';
+                $('#detail')[0].style.display='block';
+                $('#address')[0].style.display='none';
+                $.ajax({
+                    url:'/pay/',
+                    dataType:'json',
+                    type:'POST',
+                    async: false,
+                    data: JSON.stringify({'time':time_stamp,'pay':'￥999','number':1,'name':'Redmi Note 8 Pro','flag':1}),
+                    success: function(data){
+                        console.log(data);
+                        if (data.status === 'ok') {
+                            img = data;
+                            alert('物流信息');
+                        }
+
+                    },
+                    error:function(response){
+                        console.log(response.status);
+                }
+        });
+                console.log(e.target.innerText)
+            }
+            else if(e.target.innerText==='收货')
+            {
+                $('#pay')[0].style.display='none';
+                $('#detail')[0].style.display='none';
+                $('#address')[0].style.display='block';
+
+
+                console.log(e.target.innerText)
+            }
+
+        }
+        )
+
+    </script>
+    <footer style="text-align: center;position:relative;height:50px;font-size:20px;width:100%;margin-top:100px;">
+        @ 2019 flask.shopping.com 晋ICP备 131110532号-1
+    </footer>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.css') }}">
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
+    <link rel="shortcut icon" href="{{ url_for('static',filename='img/logo.png') }}">
+</head>
+<body>
+<div style="text-align: center;">
+   <h2>注册中心</h2>
+</div>
+
+<form style="margin:0 auto;width:400px;height:300px;position:relative;top:40px;">
+  <div class="form-group">
+    <label for="exampleInputEmail1">用户名</label>
+    <input type="text" class="form-control" id="Name" placeholder="Username">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">邮&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
+    <input type="email" class="form-control" id="Email1" placeholder="Email" onchange="check()">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">手&nbsp;&nbsp;&nbsp;&nbsp;机</label>
+    <input type="tel" class="form-control" id="Phone" placeholder="Phone" onchange="change()">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+    <input type="password" class="form-control" id="Password" placeholder="Password">
+  </div>
+
+</form>
+{# <form  style="margin:0 auto;width:400px;height:60px;position:relative;top:40px;" method="post" enctype=multipart/form-data >#}
+{#    <input type=file name=photo id="crowd_file" style="display: block;float:left;" value="上传头像">#}
+{#    <input type="button"  class="btn btn-success" style="display: block;float:right;" value="上传" onclick="sub()">#}
+{# </form>#}
+ <br>
+ <br>
+ <a class="btn btn-primary sub" href="#" role="button" style="width:400px;position:relative;display:block;margin: 0 auto;">提交</a>
+ <footer style="text-align: center;position:relative;height:50px;font-size:20px;width:100%;margin-top:100px;">
+        @ 2019 flask.shopping.com 晋ICP备 131110532号-1
+ </footer>
+</body>
+<script>
+    let formFile = new FormData();
+    let fu1 = false;
+    let fu2 = false;
+    let img = '';
+    {#上传头像#}
+    {#function sub()#}
+    {#{#}
+    {#    var formData = new FormData();#}
+    {#    formData.append("file",$('#crowd_file')[0].files[0]);#}
+    {##}
+    {#    if(''!==formData.values() && ''!==formFile.values())#}
+    {#    {#}
+    {#        $.ajax({#}
+    {#        url:'/upload',#}
+    {#        dataType:'json',#}
+    {#        type:'POST',#}
+    {#        async: false,#}
+    {#        data: formData,#}
+    {#        processData : false, // 使数据不做处理#}
+    {#        contentType : false, // 不要设置Content-Type请求头#}
+    {#        success: function(data){#}
+    {#            console.log(data);#}
+    {#            if (data.status === 'ok') {#}
+    {#                img = data.img;#}
+    {#                alert('上传成功！');#}
+    {#            }#}
+    {##}
+    {#        },#}
+    {#        error:function(response){#}
+    {#            console.log(response.status);#}
+    {#        }#}
+    {#    });#}
+    {#        console.log('1313',formData,formFile);#}
+    {#    }#}
+    {##}
+    {# }#}
+    {#检查是否为邮箱#}
+    function check()
+    {
+        let email = $("#Email1");
+        let re = /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/;
+        let result = re.test(email.val());
+        if (result)
+        {
+             console.log(result);
+             fu2 = true;
+        }
+        else{
+            alert('请输入正确的邮箱地址')
+        }
+
+    }
+
+    {#检查输入格式是否为手机号#}
+    function change()
+    {
+        let tel = $("#Phone");
+        if(tel.val().length === 11){
+            if(Number(tel.val()))
+            {
+                console.log('号码正确');
+                fun1 = true;
+            }
+            else{
+                alert('请输入11位数字')
+            }
+        } else {
+            alert('请输入11位手机号')
+        }
+
+    }
+
+
+
+
+    {# 注册按钮点击 #}
+    $('.sub').click(()=>{
+        let name = $('#Name').valueOf()[0].value;
+        let password = $('#Password').valueOf()[0].value;
+        let phone = $('#Phone').valueOf()[0].value;
+        let email = $('#Email1').valueOf()[0].value;
+
+        {#let img1 = $('#crowd_file')[0].value.split('\\').slice(-1)[0];#}
+        {#formFile['img']=img1;#}
+        formFile['name']=name;
+        formFile['phone']=phone;
+        formFile['password']=password;
+        formFile['email'] = email;
+
+
+
+
+
+        if (formFile.values()!==''){
+              $.ajax({
+                      type:"post",
+                      url: '/api/register/',
+                      data:JSON.stringify(formFile),
+                      contentType: 'application/json; charset=UTF-8',
+                      success:function(data){
+                       {#console.log('后台返回来的结果'+data);#}
+                          if(data==='注册成功')
+                          {
+                              window.location.href = '/login';
+                          }
+                          else
+                          {
+                              alert(data);
+                          }
+
+                     },
+                      error: function() {
+                      console.log("网络异常",1500);
+                     }
+                    });
+
+        }
+        else{
+            alert('数据未填满或格式不正确')
+        }
+
+    });
+
+
+
+
+
+
+
+</script>
+</html>
